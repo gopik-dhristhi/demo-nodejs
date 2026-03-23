@@ -1,7 +1,7 @@
-name: CI/CD Pipeline
+name: Node CI
 
 env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true  # <-- sets Node 24 for all actions
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 on:
   push:
@@ -10,33 +10,49 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build-and-deploy:
+  build-and-test:
     runs-on: ubuntu-latest
 
+    strategy:
+      matrix:
+        node-version: [24.x]   # easy to add more versions later
+
     steps:
-      # 1️⃣ Checkout code
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      # 2️⃣ Setup Node.js
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
+      - name: Set up Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
         with:
-          node-version: 24
+          node-version: ${{ matrix.node-version }}
+          cache: npm           # enables npm cache based on lockfile [web:11][web:12][web:15]
 
-      # 3️⃣ Install dependencies
       - name: Install dependencies
-        run: npm install
+        run: npm ci            # faster & reproducible in CI [web:11][web:12]
 
-      # 4️⃣ Run tests
-#      - name: Run tests
-    #    run: |
-     #     if [ -f package.json ]; then
-      #      npm test || exit 1
-       #   else
-        #    echo "No tests found"
-         # fi
+      - name: Lint
+        if: hashFiles('package.json') != ''
+        run: |
+          if npm run | grep -q "lint"; then
+            npm run lint
+          else
+            echo "No lint script defined, skipping."
+          fi
 
-      # 5️⃣ Build the application
-      - name: Build application
-        run: npm run build
+      - name: Test
+        if: hashFiles('package.json') != ''
+        run: |
+          if npm run | grep -q "test"; then
+            npm test
+          else
+            echo "No test script defined, skipping."
+          fi
+
+      - name: Build
+        if: hashFiles('package.json') != ''
+        run: |
+          if npm run | grep -q "build"; then
+            npm run build
+          else
+            echo "No build script defined, skipping."
+          fi
