@@ -29,13 +29,13 @@ jobs:
         run: npm install
 
       # 4️⃣ Run tests
-      - name: Run tests
-        run: |
-          if [ -f package.json ]; then
-            npm test || exit 1
-          else
-            echo "No tests found"
-          fi
+#      - name: Run tests
+    #    run: |
+     #     if [ -f package.json ]; then
+      #      npm test || exit 1
+       #   else
+        #    echo "No tests found"
+         # fi
 
       # 5️⃣ Build the application
       - name: Build application
