@@ -1,7 +1,7 @@
-# Use official Node.js 24 image
-FROM node:24
+# Use official Node.js image
+FROM node:18
 
-# Set working directory
+# Create app directory
 WORKDIR /app
 
 # Copy package files first (better caching)
@@ -13,7 +13,7 @@ RUN npm install
 # Copy rest of the app
 COPY . .
 
-# Expose your app port (change if needed)
+# Expose port (change if your app uses a different port)
 EXPOSE 3000
 
 # Start the app
