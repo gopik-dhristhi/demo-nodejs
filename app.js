@@ -11,6 +11,14 @@ app.get('/about', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'about.html'));
 });
 
+app.get('/herbs', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'herbs.html'));
+});
+
+app.get('/shrubs', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'shrubs.html'));
+});
+
 // Optional: fallback for undefined routes (404 page)
 app.use((req, res) => {
     res.status(404).send('<h1>404 Not Found</h1>');
