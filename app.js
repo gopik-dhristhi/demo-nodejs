@@ -19,6 +19,10 @@ app.get('/shrubs', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'shrubs.html'));
 });
 
+app.get('/shop', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'shop.html'));
+});
+
 // Optional: fallback for undefined routes (404 page)
 app.use((req, res) => {
     res.status(404).send('<h1>404 Not Found</h1>');

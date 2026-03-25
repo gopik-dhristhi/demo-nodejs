@@ -1,7 +1,12 @@
 // Simple JS for demonstration
 console.log("Welcome to Plant World!");
 
-// You could add interactive features, e.g., highlight current page
+// Buy button function
+function buyPlant(plantName) {
+    alert("You selected: " + plantName);
+}
+
+// Highlight current page in navbar
 document.addEventListener('DOMContentLoaded', () => {
     const current = window.location.pathname.split("/").pop();
     document.querySelectorAll('nav ul li a').forEach(link => {
