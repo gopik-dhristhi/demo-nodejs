@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
 
     # ✅ Ensure tag commit is from main branch
-    if: contains(github.event.head_commit.message, '') || github.ref_type == 'tag'
+    github.ref_type == 'tag'
 
     strategy:
       matrix:
