@@ -42,7 +42,7 @@ jobs:
       - name: Stop if not from main
         if: steps.check_branch.outputs.on_main != 'true'
         run: |
-          echo "Tag is not from main branch. Exiting."
+          echo "Tag is not from main branch. Exiting."   
           exit 1
 
       - uses: actions/setup-node@v4

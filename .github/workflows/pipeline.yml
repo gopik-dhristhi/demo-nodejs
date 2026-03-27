@@ -1,31 +1,30 @@
 name: Node CI
 
 env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true      #ensure all actions run on Node 24, even if they specify an older version
 permissions:
-  contents: read
-  packages: write
+  contents: read                                # allow reading repo contents for checkout and other actions
 
 on:
-  push:
+  push:                                         
     branches: [ "demo" ]
   pull_request:
     branches: [ "main" ]
 
 jobs:
-  build-and-test:
-    runs-on: ubuntu-latest
+  build-and-test:                                # main job to build and test the code 
+    runs-on: ubuntu-latest      
 
-    strategy:
+    strategy:                                    # define a matrix to test against multiple Node versions
       matrix:
-        node-version: [24.x]   # easy to add more versions later
+        node-version: [24.x]                     # easy to add more versions later
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - name: Checkout repository                
+        uses: actions/checkout@v4  
 
-      - name: Set up Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
+      - name: Set up Node.js ${{ matrix.node-version }} 
+        uses: actions/setup-node@v4 
         with:
           node-version: ${{ matrix.node-version }}
           cache: npm           # enables npm cache based on lockfile [web:11][web:12][web:15]
@@ -33,7 +32,7 @@ jobs:
       - name: Install dependencies
         run: npm ci            # faster & reproducible in CI [web:11][web:12]
 
-      - name: Lint
+      - name: Lint                                # only run if package.json exists and has a lint script
         if: hashFiles('package.json') != ''
         run: |
           if npm run | grep -q "lint"; then
@@ -42,7 +41,7 @@ jobs:
             echo "No lint script defined, skipping."
           fi
 
-      - name: Test
+      - name: Test                               # only run if package.json exists and has a test script
         if: hashFiles('package.json') != ''
         run: |
           if npm run | grep -q "test"; then
@@ -51,7 +50,7 @@ jobs:
             echo "No test script defined, skipping."
           fi
 
-      - name: Build
+      - name: Build                             # only run if package.json exists and has a build script
         if: hashFiles('package.json') != ''
         run: |
           if npm run | grep -q "build"; then
