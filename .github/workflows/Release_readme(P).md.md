@@ -114,4 +114,4 @@ Install → Lint → Test → Build
 
 ## 👨‍💻 Author
 
-Your Name
+Gopi Krishna
